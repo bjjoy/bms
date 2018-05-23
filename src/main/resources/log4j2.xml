@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+  <Properties>
+    <Property name="log-path">/logger/</Property>
+  </Properties>
+  <Appenders>
+    <Console name="Console" target="SYSTEM_OUT" follow="true">
+      <PatternLayout>
+        <charset>utf-8</charset>
+        <pattern>%d %p %C{1.} [%t] %X %m%n</pattern>
+      </PatternLayout>
+    </Console>
+    <RollingFile name="RollingFile" fileName="${log-path}/bms_demo.log" filePattern="${log-path}/bms_demo-%d{yyyy-MM-dd}-%i.log" >
+      <PatternLayout>
+        <charset>utf-8</charset>
+        <pattern>%d %p %C{1.} [%t] %X %m%n</pattern>
+      </PatternLayout>
+      <Policies>
+        <SizeBasedTriggeringPolicy size="10 MB" />
+      </Policies>
+      <DefaultRolloverStrategy max="100"/>
+    </RollingFile>
+  </Appenders>
+  <Loggers>
+    <Logger name="cn.bjjoy.bms.setting.*.dao" level="debug" additivity="false">
+      <AppenderRef ref="RollingFile"/>
+      <AppenderRef ref="Console" />
+    </Logger>
+    <Root level="info">
+      <AppenderRef ref="RollingFile"/>
+      <AppenderRef ref="Console" />
+    </Root>
+  </Loggers>
+</Configuration>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.bjjoy.bms.setting.dao.UserRoleMapper">
+
+  <resultMap id="BaseResultMap" type="cn.bjjoy.bms.setting.entity.UserRole">
+    <id column="user_id" jdbcType="INTEGER" property="userId" />
+    <id column="role_id" jdbcType="INTEGER" property="roleId" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    user_id, role_id
+  </sql>
+
+
+  <insert id="insert" parameterType="cn.bjjoy.bms.setting.entity.UserRole">
+    insert into user_role
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="roleId != null">
+        role_id
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="roleId != null">
+        #{roleId,jdbcType=INTEGER}
+      </if>
+    </trim>
+  </insert>
+
+  <delete id="deleteByUserId" parameterType="java.lang.Integer">
+    delete from user_role where user_id=#{userId}
+  </delete>
+
+  <update id="update" parameterType="java.util.Map">
+    update user_role
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="roleId != null">
+        role_id = #{roleId,jdbcType=INTEGER}
+      </if>
+    </set>
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+
+  <resultMap id="UserRoleMap" extends="BaseResultMap" type="cn.bjjoy.bms.setting.dto.UserRoleDto">
+    <result column="name" jdbcType="VARCHAR" property="name" />
+  </resultMap>
+
+  <select id="getUserRoleList" parameterType="java.util.List" resultMap="UserRoleMap">
+    select ur.user_id, ur.role_id, r.name
+    from user_role ur, role r
+    <where>
+      ur.role_id = r.id
+      <if test="userIdList != null">
+        and ur.user_id in
+        <foreach collection="userIdList"  item="userId" separator="," open="(" close=")">
+          #{userId,jdbcType=INTEGER}
+        </foreach>
+      </if>
+    </where>
+  </select>
+
+  <select id="getUserRoleCountByRoleId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    select count(*)
+    from user_role ur, `user` u
+    <where>
+      ur.user_id = u.id
+      and u.state = 1
+      and u.del_flag = 0
+      <if test="roleId != null">
+        and ur.role_id = #{roleId}
+      </if>
+    </where>
+  </select>
+</mapper>
