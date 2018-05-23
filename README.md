@@ -1,6 +1,8 @@
 # bms 后台管理系统
 后台管理系统权限控制，对user、role、menu（通常菜单和按钮）进行增删改查。
-springboot+shiro+freemarker+mybatis+mysql+java1.8
+springboot+shiro+freemarker+ace admin+mybatis+mysql+java1.8
+
+ace admin是前端框架（bootstrap，jquery）
 
 使用说明
 1. 执行bms_demo.sql，初始化本地数据库
